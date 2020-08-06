@@ -68,3 +68,36 @@ note.save({},{
   }
 })
 */
+
+var Users = Backbone.Collection.extend({
+  model: User
+})
+var users = new Users([
+  new User({'email': 'a1@yopmail.com','first_name': 'prathap'}),
+  new User({'email': 'a2@yopmail.com','first_name': 'prathapa2'})
+])
+
+console.log(users)
+users.add(
+  new User({'email': 'a3@yopmail.com','first_name': 'prathap3'})
+)
+
+
+users.each(function(user){
+  user.save(
+    {},
+    {
+      success: function(model, response){
+        debugger;
+        console.log(model)
+        console.log("The Response Id is "+ String(response.id))
+      },
+      error: function(model, response){
+        debugger;
+        console.log(model)
+        console.log("The Response Id is" + String(response.id))
+      },
+      wait: true
+    }
+  )
+})
