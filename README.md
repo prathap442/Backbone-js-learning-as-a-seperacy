@@ -125,3 +125,28 @@ var user = new User({
   'first_name': 'prathap4',
   'last_name': 'mohan3'
 })
+
+
+
+
+------------------------------------Focusing on the Views in this section--------------------
+
+here let us write the views referring to the dom element in the main.js file 
+
+
+Backbone.view.extend by doing this we are aquiring the Backnone view properties to the songView
+class or the variable 
+```
+var songView = Backbone.view.extend({
+  render: function(){
+    //this is the method what would get called when renderingthe template
+    this.$el.html('Ehllo This is prathap from the sai')
+  }
+})
+
+var songviewInstance = new songView({el: '#container'})
+//the below function when called does the process of find the div#container and then replacing the 
+//content withthe single 'div' by default with the content as specified in the render function
+songviewinstance.render()
+
+```
