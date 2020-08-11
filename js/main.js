@@ -1,50 +1,37 @@
-var AnimalView = Backbone.View.extend({
-  tagName: "li",
-  className: "document-row",
-  attributes: {
-    "data-genre": "Jazz"
+var Song = Backbone.Model.extend({
+   defaults: {
+     listeners: 0
+   }
+})
+
+var song1 = new Song({title: "Beed Chant For Krishna"})
+
+var SongView = Backbone.View.extend({
+  initialize: function(){
+    this.model.on('change', this.render, this) 
   },
-  //here this consists of the render method that is being defined would act as a reference when 
-  //rendering the template. The template render should return the dom element at the end .
+
   render: function(){
-    this.$el.append(this.model.get('name') + '<button>Button</button> <button class="bookmark">ButtonWithBook</button>');
-    //this returning of the this statement is a must for the sake of hte continuous concatinatin that can occur now .
-    return this;
+    this.$el.html('the number of listeners for the song1 is:'+ this.model.get('listeners'))
+    console.log("The view for the songView is being rendered")
+    return this
   },
-
-  //to handle out the events we use the events property to handle out the events on the dom .
-  events: {
-    //enable click event in general for the dom element
-    "click": "buttonClicked",
-    //enable click event for the elements with the class bookmark
-    "click .bookmark": "buttonClickBookMarkClass"
-  },
-  buttonClicked: function(){
-    console.log("The button is being clicked") 
-  },
-  //this function is to enable on click of the elements with the class buttonClickBookMarkClass
-  buttonClickBookMarkClass: function(e){
-    e.stopPropagation()
-    console.log("The click event for the class book mark is being made ")
-  }
-});
-
-//passing up of the data to the view using the Model
-
-var Animal = Backbone.Model.extend({
-  defaults: {
-    'animalType': 'mammal'
-  }
-  //here we can write the validate function if we want to validate specifically the models that we creaete
 })
 
-var animal1 = new Animal({'name': 'hog', 'size': 40, 'color': 'black'})
-var animal2 = new Animal({'name': 'Archers', 'size': 20, 'color': 'yellow'})
-//passsing the data onver here
 
-var animalView = new AnimalView({el: '#container', model: animal1})
-animalView.render()
+var songview = new SongView({model: song1, el: '#container'})
+songview.render()
 
-var animalCollection = Backbone.Collection.extend({
-  model: Animal
-})
+
+//since the state management has to be done in a real time like whenever the users are being updated then 
+//count of the listeners should also get updated and this can be done in 2 ways
+/*
+  * polling: 
+      This is the way in which the client would continuously ping server to find any updates for the model state
+  * push Notification:
+      Here a server would detectedly be sitting at the backend to notify the changes that happened to the data that is being 
+      displayed in the front end . 
+*/
+
+
+
