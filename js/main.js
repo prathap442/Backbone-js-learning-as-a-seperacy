@@ -1,37 +1,34 @@
-var Song = Backbone.Model.extend({
-  defaults: {
-    title: "Rain in the Gain"
+var person = {
+  title: "this is the person title",
+  walk: function(){
+    this.trigger("walking",{
+      speed: 1,
+      time: "80:00pm"
+    })
   }
+}
+
+/*
+  so here we are using underscore.js and we are extending the properties of the person object 
+  to have backbone.events
+*/
+_.extend(person, Backbone.Events)
+
+
+//inorder to subscribe for the event
+person.on("walking",function(e){
+  console.log("THe arguments passed are", e)
 })
 
-var SongView = Backbone.View.extend({
-  tagName: "span",
-  className: "song",
-  id: "1234",
-  attributes: {
-    "data-genre": "Jazz"
-  },
-  render: function() {
-    this.$el.html('song view rendering');
-    return this;
-  },
-  /*
-    the above function tries to frame the following thing
-    <span id='1234' class='song' data-genre='jazz'>song view rendering</span>
-  */
-  initialize: function(){
-    this.model.on('add',this.onSongAdded, this)  
-  },
-
-  onSongAdded: function(song){
-    var songView = new SongView({ model: song })
-    this.$el.append(songView.render().$el)
-  }
+//subscribing to an event by name walk and when the walk event is 
+//being triggered then we get the walking function to be executed
+person.on("walk",function(){
+  alert("trigerred")
 })
-var songView = new SongView();
-var songs = [
-  new Song({title: "The Heart is back"}),
-  new Song({title: "Love Song in the 2.0"}),
-  new Song({title: "The Mrucose is the fulfillment"})
-];
-$("#container").html(songView.render().$el);
+
+//unsubscribing to an event by name walking
+person.off("walking",function(){
+  console.log("Unsubscribed from an event by name walk");
+})
+
+//person.once can be used in order to make the trigger function work only once for that object .
