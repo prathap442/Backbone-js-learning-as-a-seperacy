@@ -1,37 +1,37 @@
 var Song = Backbone.Model.extend({
-   defaults: {
-     listeners: 0
-   }
+  defaults: {
+    title: "Rain in the Gain"
+  }
 })
-
-var song1 = new Song({title: "Beed Chant For Krishna"})
 
 var SongView = Backbone.View.extend({
+  tagName: "span",
+  className: "song",
+  id: "1234",
+  attributes: {
+    "data-genre": "Jazz"
+  },
+  render: function() {
+    this.$el.html('song view rendering');
+    return this;
+  },
+  /*
+    the above function tries to frame the following thing
+    <span id='1234' class='song' data-genre='jazz'>song view rendering</span>
+  */
   initialize: function(){
-    this.model.on('change', this.render, this) 
+    this.model.on('add',this.onSongAdded, this)  
   },
 
-  render: function(){
-    this.$el.html('the number of listeners for the song1 is:'+ this.model.get('listeners'))
-    console.log("The view for the songView is being rendered")
-    return this
-  },
+  onSongAdded: function(song){
+    var songView = new SongView({ model: song })
+    this.$el.append(songView.render().$el)
+  }
 })
-
-
-var songview = new SongView({model: song1, el: '#container'})
-songview.render()
-
-
-//since the state management has to be done in a real time like whenever the users are being updated then 
-//count of the listeners should also get updated and this can be done in 2 ways
-/*
-  * polling: 
-      This is the way in which the client would continuously ping server to find any updates for the model state
-  * push Notification:
-      Here a server would detectedly be sitting at the backend to notify the changes that happened to the data that is being 
-      displayed in the front end . 
-*/
-
-
-
+var songView = new SongView();
+var songs = [
+  new Song({title: "The Heart is back"}),
+  new Song({title: "Love Song in the 2.0"}),
+  new Song({title: "The Mrucose is the fulfillment"})
+];
+$("#container").html(songView.render().$el);
